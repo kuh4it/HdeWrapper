@@ -2,6 +2,15 @@
 #include "HdeWrapper.h"
 #include <cstring>
 
+int p_dist = 0;
+
+// GLOBAL with limits
+int GetPageFrameDistance()
+{
+    if(p_dist < 1) return 5;
+    return p_dist;
+}
+
 HdeWrapper::HdeWrapper(unsigned char* base) : base_address(base) {}
 
 std::pair<bool, uintptr_t> HdeWrapper::FindString(const std::string& str) {
@@ -15,7 +24,7 @@ std::pair<bool, uintptr_t> HdeWrapper::FindString(const std::string& str) {
 }
 
 std::pair<bool, uintptr_t> HdeWrapper::FindNearestInstruction(const std::string& instructionType, uintptr_t startAddress, int maxDistance, bool searchForward) {
-    int distance = 0;
+    int distance = GetPageFrameDistance();
     unsigned char* addr = reinterpret_cast<unsigned char*>(startAddress);
     while (distance < maxDistance) {
         hde64s hs;
