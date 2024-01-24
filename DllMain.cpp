@@ -8,6 +8,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
         {
+            //
+            // We don't spoofcall or use lazy importer cause we ghetto
+            //
             HdeWrapper wrapper(reinterpret_cast<unsigned char*>(GetModuleHandle(NULL))); // Base address of the process
 
             //Search for a unique string pattern from your pseudocode
