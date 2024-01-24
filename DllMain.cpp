@@ -2,6 +2,8 @@
 #include "HdeWrapper.h"
 #include <windows.h>
 
+uintptr_t gWorldPtr;
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
     switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
@@ -13,11 +15,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
             if (stringSearchResult.first) {
                 uintptr_t stringAddress = stringSearchResult.second;
 
-                //Assuming mov instruction related to GWorld is within 100 instructions after the found string
+                //
+                // mov rcx, GWorld
+                //
                 auto instructionSearchResult = wrapper.FindNearestInstruction("mov", stringAddress, 100, true); 
                 if (instructionSearchResult.first) {
-                    uintptr_t gWorldPtrAddress = instructionSearchResult.second;
-                    //wow
+                    gWorldPtr = instructionSearchResult.second;
+                    //
+                    // Proceed with p2c
+                    //
                 }
             }
         }
